@@ -1,24 +1,33 @@
-﻿using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using WPF_SP.Data;
+using WPF_SP.ViewModels;
+using WPF_SP.Views;
 
 namespace WPF_SP
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly MainViewModel _viewModel;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            ITareaRepository repository = new TareaRepository(DbConfig.ConnectionString);
+            _viewModel = new MainViewModel(repository);
+            _viewModel.EditarSolicitado += OnEditarSolicitado;
+            DataContext = _viewModel;
+
+            Loaded += async (_, _) => await _viewModel.CargarCommand.ExecuteAsync(null);
+        }
+
+        private async void OnEditarSolicitado(TareaEditViewModel edicion)
+        {
+            var dialog = new TareaEditWindow(edicion) { Owner = this };
+            if (dialog.ShowDialog() == true)
+            {
+                await _viewModel.GuardarEdicionCommand.ExecuteAsync(edicion);
+            }
         }
     }
 }
