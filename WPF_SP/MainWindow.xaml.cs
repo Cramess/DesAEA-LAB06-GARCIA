@@ -1,33 +1,35 @@
 using System.Windows;
 using WPF_SP.Data;
 using WPF_SP.ViewModels;
-using WPF_SP.Views;
 
 namespace WPF_SP
 {
     public partial class MainWindow : Window
     {
-        private readonly MainViewModel _viewModel;
+        private readonly AppViewModel _viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            ITareaRepository repository = new TareaRepository(DbConfig.ConnectionString);
-            _viewModel = new MainViewModel(repository);
-            _viewModel.EditarSolicitado += OnEditarSolicitado;
+            var cs = DbConfig.ConnectionString;
+
+            var categoriaRepo  = new CategoriaRepository(cs);
+            var proveedorRepo  = new ProveedorRepository(cs);
+            var productoRepo   = new ProductoRepository(cs);
+            var pedidoRepo     = new PedidoRepository(cs);
+
+            _viewModel = new AppViewModel(
+                new CategoriasViewModel(categoriaRepo),
+                new ProveedoresViewModel(proveedorRepo),
+                new ProductosViewModel(productoRepo, categoriaRepo, proveedorRepo),
+                new PedidosViewModel(pedidoRepo),
+                new ReportesViewModel(pedidoRepo)
+            );
+
             DataContext = _viewModel;
-
-            Loaded += async (_, _) => await _viewModel.CargarCommand.ExecuteAsync(null);
-        }
-
-        private async void OnEditarSolicitado(TareaEditViewModel edicion)
-        {
-            var dialog = new TareaEditWindow(edicion) { Owner = this };
-            if (dialog.ShowDialog() == true)
-            {
-                await _viewModel.GuardarEdicionCommand.ExecuteAsync(edicion);
-            }
+            Loaded += async (_, _) =>
+                await _viewModel.NavegrarCommand.ExecuteAsync("Categorias");
         }
     }
 }

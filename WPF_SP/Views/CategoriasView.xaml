@@ -1,0 +1,71 @@
+<UserControl x:Class="WPF_SP.Views.CategoriasView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:WPF_SP.ViewModels">
+
+    <Grid Margin="28,20,28,28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Categorías" FontSize="20" FontWeight="Bold"/>
+            <TextBlock Text="Mantenimiento de categorías de productos" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+        </StackPanel>
+        <Border Grid.Row="1" Background="{StaticResource SurfaceBrush}" CornerRadius="14" Padding="20" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,12,12">
+                    <TextBlock Text="Nombre Categoría *" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                    <TextBox Style="{StaticResource ModernTextBox}" MaxLength="30"
+                             Text="{Binding NombreCategoria, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,12">
+                    <TextBlock Text="Descripción" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                    <TextBox Style="{StaticResource ModernTextBox}" MaxLength="200"
+                             Text="{Binding Descripcion, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                           Text="{Binding ErrorMessage}" Foreground="{StaticResource DangerBrush}"
+                           FontSize="12" Margin="2,0,0,8"
+                           Visibility="{Binding ErrorMessage, Converter={StaticResource StringNullOrEmptyToVisibility}}"/>
+                <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+                    <Button Style="{StaticResource AccentButton}" Command="{Binding GuardarCommand}" MinWidth="110">
+                        <TextBlock Text="Guardar"/>
+                    </Button>
+                    <Button Style="{StaticResource OutlineButton}" Command="{Binding EditarSeleccionadaCommand}"
+                            Margin="8,0,0,0" MinWidth="90">
+                        <TextBlock Text="Editar"/>
+                    </Button>
+                    <Button Style="{StaticResource OutlineButton}" Command="{Binding CancelarEdicionCommand}"
+                            Margin="8,0,0,0" MinWidth="90">
+                        <TextBlock Text="Cancelar"/>
+                    </Button>
+                    <Button Style="{StaticResource DangerButton}" Command="{Binding EliminarSeleccionadaCommand}"
+                            Margin="8,0,0,0" MinWidth="100">
+                        <TextBlock Text="Eliminar"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <DataGrid Grid.Row="2" Style="{StaticResource ModernDataGrid}"
+                  ItemsSource="{Binding Categorias}"
+                  SelectedItem="{Binding CategoriaSeleccionada, Mode=TwoWay}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"          Binding="{Binding CategoriaID}"    Width="60"/>
+                <DataGridTextColumn Header="Nombre"      Binding="{Binding NombreCategoria}" Width="*"/>
+                <DataGridTextColumn Header="Descripción" Binding="{Binding Descripcion}"     Width="2*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
