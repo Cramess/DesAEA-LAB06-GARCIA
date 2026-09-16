@@ -74,8 +74,8 @@ public partial class CategoriasViewModel : ObservableObject
     private async Task EliminarSeleccionadaAsync()
     {
         if (CategoriaSeleccionada is null) return;
-        var res = MessageBox.Show($"¿Eliminar la categoría \"{CategoriaSeleccionada.NombreCategoria}\"?",
-            "Confirmar", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        var res = MessageBox.Show($"¿Dar de baja lógica a la categoría \"{CategoriaSeleccionada.NombreCategoria}\"?",
+            "Confirmar Baja Lógica", MessageBoxButton.YesNo, MessageBoxImage.Warning);
         if (res != MessageBoxResult.Yes) return;
         ErrorMessage = null;
         try
@@ -83,7 +83,7 @@ public partial class CategoriasViewModel : ObservableObject
             await _repo.EliminarAsync(CategoriaSeleccionada.CategoriaID);
             await CargarAsync();
         }
-        catch (Exception ex) { ErrorMessage = $"Error al eliminar: {ex.Message}"; }
+        catch (Exception ex) { ErrorMessage = $"Error al dar de baja lógica: {ex.Message}"; }
     }
 
     [RelayCommand]

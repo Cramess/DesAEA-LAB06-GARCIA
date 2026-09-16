@@ -16,6 +16,7 @@ public partial class ProveedoresViewModel : ObservableObject
     [ObservableProperty] private Proveedor? proveedorSeleccionado;
     [ObservableProperty] private string? errorMessage;
     [ObservableProperty] private bool isBusy;
+    [ObservableProperty] private string? filtroBusquedaCompania;
     [ObservableProperty] private string? filtroBusquedaContacto;
     [ObservableProperty] private string? filtroBusquedaCiudad;
     [ObservableProperty] private string companiaNombre = string.Empty;
@@ -55,9 +56,10 @@ public partial class ProveedoresViewModel : ObservableObject
         ErrorMessage = null;
         try
         {
+            var comp     = string.IsNullOrWhiteSpace(FiltroBusquedaCompania) ? null : FiltroBusquedaCompania.Trim();
             var contacto = string.IsNullOrWhiteSpace(FiltroBusquedaContacto) ? null : FiltroBusquedaContacto.Trim();
             var ciu      = string.IsNullOrWhiteSpace(FiltroBusquedaCiudad)   ? null : FiltroBusquedaCiudad.Trim();
-            var items    = await _repo.BuscarAsync(contacto, ciu);
+            var items    = await _repo.BuscarAsync(contacto, ciu, comp);
             Proveedores.Clear();
             foreach (var p in items) Proveedores.Add(p);
         }
@@ -68,6 +70,7 @@ public partial class ProveedoresViewModel : ObservableObject
     [RelayCommand]
     private async Task LimpiarFiltrosAsync()
     {
+        FiltroBusquedaCompania = null;
         FiltroBusquedaContacto = null;
         FiltroBusquedaCiudad   = null;
         await CargarAsync();
@@ -114,8 +117,8 @@ public partial class ProveedoresViewModel : ObservableObject
     private async Task EliminarSeleccionadoAsync()
     {
         if (ProveedorSeleccionado is null) return;
-        var res = MessageBox.Show($"¿Eliminar el proveedor \"{ProveedorSeleccionado.CompaniaNombre}\"?",
-            "Confirmar", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        var res = MessageBox.Show($"¿Dar de baja lógica al proveedor \"{ProveedorSeleccionado.CompaniaNombre}\"?",
+            "Confirmar Baja Lógica", MessageBoxButton.YesNo, MessageBoxImage.Warning);
         if (res != MessageBoxResult.Yes) return;
         ErrorMessage = null;
         try
@@ -123,7 +126,7 @@ public partial class ProveedoresViewModel : ObservableObject
             await _repo.EliminarAsync(ProveedorSeleccionado.ProveedorID);
             await CargarAsync();
         }
-        catch (Exception ex) { ErrorMessage = $"Error al eliminar: {ex.Message}"; }
+        catch (Exception ex) { ErrorMessage = $"Error al dar de baja lógica: {ex.Message}"; }
     }
 
     [RelayCommand]

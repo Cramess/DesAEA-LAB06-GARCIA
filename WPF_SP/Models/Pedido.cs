@@ -12,8 +12,8 @@ public class Pedido
     public string? Destinatario { get; set; }
     public string? CiudadDestino { get; set; }
     public string? PaisDestino { get; set; }
+    public bool Activo { get; set; } = true;
 
-    // Propiedades de visualización (joined)
     public string? NombreCliente { get; set; }
     public string? NombreEmpleado { get; set; }
     public string? NombreTransportista { get; set; }

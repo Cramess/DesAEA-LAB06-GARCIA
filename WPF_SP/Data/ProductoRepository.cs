@@ -35,9 +35,15 @@ public class ProductoRepository : IProductoRepository
         await using var con = new SqlConnection(_cs);
         await using var cmd = new SqlCommand("dbo.usp_Producto_Crear", con) { CommandType = CommandType.StoredProcedure };
         AddParams(cmd, p);
+        var paramNuevoId = cmd.Parameters.Add("@NuevoID", SqlDbType.Int);
+        paramNuevoId.Direction = ParameterDirection.Output;
+
         await con.OpenAsync();
-        var result = await cmd.ExecuteScalarAsync();
-        return Convert.ToInt32(result);
+        await cmd.ExecuteNonQueryAsync();
+
+        var nuevoId = paramNuevoId.Value != DBNull.Value ? Convert.ToInt32(paramNuevoId.Value) : 0;
+        p.ProductoID = nuevoId;
+        return nuevoId;
     }
 
     public async Task ActualizarAsync(Producto p)
@@ -46,6 +52,7 @@ public class ProductoRepository : IProductoRepository
         await using var cmd = new SqlCommand("dbo.usp_Producto_Actualizar", con) { CommandType = CommandType.StoredProcedure };
         cmd.Parameters.Add("@ProductoID", SqlDbType.Int).Value = p.ProductoID;
         AddParams(cmd, p);
+
         await con.OpenAsync();
         await cmd.ExecuteNonQueryAsync();
     }
@@ -53,8 +60,9 @@ public class ProductoRepository : IProductoRepository
     public async Task EliminarAsync(int id)
     {
         await using var con = new SqlConnection(_cs);
-        await using var cmd = new SqlCommand("dbo.usp_Producto_Eliminar", con) { CommandType = CommandType.StoredProcedure };
+        await using var cmd = new SqlCommand("dbo.usp_Producto_EliminarLogico", con) { CommandType = CommandType.StoredProcedure };
         cmd.Parameters.Add("@ProductoID", SqlDbType.Int).Value = id;
+
         await con.OpenAsync();
         await cmd.ExecuteNonQueryAsync();
     }
@@ -87,6 +95,7 @@ public class ProductoRepository : IProductoRepository
         UnidadesEnPedido     = r.GetInt16(r.GetOrdinal("UnidadesEnPedido")),
         NivelDeReorden       = r.GetInt16(r.GetOrdinal("NivelDeReorden")),
         Descontinuado        = r.GetBoolean(r.GetOrdinal("Descontinuado")),
+        Activo               = !r.IsDBNull(r.GetOrdinal("Activo")) && r.GetBoolean(r.GetOrdinal("Activo")),
         NombreCategoria      = Str(r, "NombreCategoria"),
         NombreProveedor      = Str(r, "NombreProveedor")
     };

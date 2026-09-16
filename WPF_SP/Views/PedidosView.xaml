@@ -3,45 +3,52 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <Grid Margin="28,20,28,28">
+    <Grid Margin="24,20,24,28">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Encabezado -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="Pedidos" FontSize="20" FontWeight="Bold"/>
-            <TextBlock Text="Mantenimiento de pedidos y órdenes de venta" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+        <StackPanel Grid.Row="0" Margin="4,0,0,18">
+            <Border Background="{StaticResource AccentSoftBrush}" CornerRadius="8"
+                    HorizontalAlignment="Left" Padding="8,3" Margin="0,0,0,6">
+                <TextBlock Text="ORDENES DE VENTA" FontSize="10" FontWeight="Bold"
+                           Foreground="{StaticResource AccentBrush}"/>
+            </Border>
+            <TextBlock Text="Pedidos" FontSize="26" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
+            <TextBlock Text="Gestion de envios, clientes y despacho de compras" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"/>
         </StackPanel>
 
-        <!-- Formulario -->
-        <Border Grid.Row="1" Background="{StaticResource SurfaceBrush}" CornerRadius="14" Padding="18,14" Margin="0,0,0,12">
+        <Border Grid.Row="1" Background="{StaticResource SurfaceBrush}" CornerRadius="20"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                Padding="22,18" Margin="0,0,0,18">
             <StackPanel>
-                <!-- Fila 1: Cliente, Empleado, Transportista -->
-                <Grid Margin="0,0,0,10">
+                <Grid Margin="0,0,0,12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                        <TextBlock Text="Cliente" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                        <TextBlock Text="Cliente" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,6"/>
                         <ComboBox Style="{StaticResource ModernComboBox}"
                                   ItemsSource="{Binding Clientes}"
                                   SelectedItem="{Binding ClienteSeleccionado}"
                                   DisplayMemberPath="Empresa"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" Margin="0,0,10,0">
-                        <TextBlock Text="Empleado (Vendedor)" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                    <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                        <TextBlock Text="Empleado (Vendedor)" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,6"/>
                         <ComboBox Style="{StaticResource ModernComboBox}"
                                   ItemsSource="{Binding Empleados}"
                                   SelectedItem="{Binding EmpleadoSeleccionado}"
                                   DisplayMemberPath="NombreCompleto"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2">
-                        <TextBlock Text="Transportista" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                        <TextBlock Text="Transportista" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,6"/>
                         <ComboBox Style="{StaticResource ModernComboBox}"
                                   ItemsSource="{Binding Transportistas}"
                                   SelectedItem="{Binding TransportistaSeleccionada}"
@@ -49,90 +56,91 @@
                     </StackPanel>
                 </Grid>
 
-                <!-- Fila 2: Fechas -->
-                <Grid Margin="0,0,0,10">
+                <Grid Margin="0,0,0,12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                        <TextBlock Text="Fecha Pedido *" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                        <TextBlock Text="Fecha Pedido *" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,6"/>
                         <DatePicker Style="{StaticResource ModernDatePicker}"
                                     SelectedDate="{Binding FechaPedido}"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" Margin="0,0,10,0">
-                        <TextBlock Text="Fecha Requerida" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                    <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                        <TextBlock Text="Fecha Requerida" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,6"/>
                         <DatePicker Style="{StaticResource ModernDatePicker}"
                                     SelectedDate="{Binding FechaRequerida}"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2">
-                        <TextBlock Text="Fecha Envío" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                        <TextBlock Text="Fecha Envio" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,6"/>
                         <DatePicker Style="{StaticResource ModernDatePicker}"
                                     SelectedDate="{Binding FechaEnvio}"/>
                     </StackPanel>
                 </Grid>
 
-                <!-- Fila 3: Destinatario, Ciudad, País -->
-                <Grid Margin="0,0,0,10">
+                <Grid Margin="0,0,0,14">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                        <TextBlock Text="Destinatario" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                        <TextBlock Text="Destinatario" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,6"/>
                         <TextBox Style="{StaticResource ModernTextBox}" MaxLength="60"
                                  Text="{Binding Destinatario, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" Margin="0,0,10,0">
-                        <TextBlock Text="Ciudad Destino" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                    <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                        <TextBlock Text="Ciudad Destino" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,6"/>
                         <TextBox Style="{StaticResource ModernTextBox}" MaxLength="30"
                                  Text="{Binding CiudadDestino, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2">
-                        <TextBlock Text="País Destino" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,5"/>
+                        <TextBlock Text="Pais Destino" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="2,0,0,6"/>
                         <TextBox Style="{StaticResource ModernTextBox}" MaxLength="30"
                                  Text="{Binding PaisDestino, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </Grid>
 
                 <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource DangerBrush}"
-                           FontSize="12" Margin="2,0,0,8"
+                           FontSize="12" Margin="2,0,0,10"
                            Visibility="{Binding ErrorMessage, Converter={StaticResource StringNullOrEmptyToVisibility}}"/>
 
                 <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource AccentButton}" Command="{Binding GuardarCommand}" MinWidth="110">
-                        <TextBlock Text="Guardar"/>
-                    </Button>
+                    <Button Style="{StaticResource AccentButton}" Command="{Binding GuardarCommand}" MinWidth="120"
+                            Content="Guardar"/>
                     <Button Style="{StaticResource OutlineButton}" Command="{Binding EditarSeleccionadoCommand}"
-                            Margin="8,0,0,0" MinWidth="90">
-                        <TextBlock Text="Editar"/>
-                    </Button>
-                    <Button Style="{StaticResource OutlineButton}" Command="{Binding CancelarEdicionCommand}" Margin="8,0,0,0">
-                        <TextBlock Text="Cancelar"/>
-                    </Button>
-                    <Button Style="{StaticResource DangerButton}" Command="{Binding EliminarSeleccionadoCommand}" Margin="8,0,0,0">
-                        <TextBlock Text="Eliminar"/>
-                    </Button>
+                            Margin="10,0,0,0" MinWidth="100" Content="Editar"/>
+                    <Button Style="{StaticResource OutlineButton}" Command="{Binding CancelarEdicionCommand}"
+                            Margin="10,0,0,0" MinWidth="100" Content="Cancelar"/>
+                    <Button Style="{StaticResource DangerButton}" Command="{Binding EliminarSeleccionadoCommand}"
+                            Margin="10,0,0,0" MinWidth="120" Content="Baja Logica"/>
                 </StackPanel>
             </StackPanel>
         </Border>
 
-        <!-- DataGrid de Pedidos -->
-        <DataGrid Grid.Row="2" Style="{StaticResource ModernDataGrid}"
-                  ItemsSource="{Binding Pedidos}"
-                  SelectedItem="{Binding PedidoSeleccionado, Mode=TwoWay}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID"            Binding="{Binding PedidoID}"              Width="50"/>
-                <DataGridTextColumn Header="Cliente"       Binding="{Binding NombreCliente}"          Width="*"/>
-                <DataGridTextColumn Header="Empleado"      Binding="{Binding NombreEmpleado}"         Width="*"/>
-                <DataGridTextColumn Header="F. Pedido"     Binding="{Binding FechaPedido, StringFormat='dd/MM/yyyy'}"    Width="100"/>
-                <DataGridTextColumn Header="F. Requerida"  Binding="{Binding FechaRequerida, StringFormat='dd/MM/yyyy'}" Width="110"/>
-                <DataGridTextColumn Header="F. Envío"      Binding="{Binding FechaEnvio, StringFormat='dd/MM/yyyy'}"     Width="90"/>
-                <DataGridTextColumn Header="Transportista" Binding="{Binding NombreTransportista}"    Width="*"/>
-                <DataGridTextColumn Header="Destino"       Binding="{Binding CiudadDestino}"          Width="110"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Border Grid.Row="2" Background="{StaticResource SurfaceBrush}" CornerRadius="20"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="1" ClipToBounds="True">
+            <DataGrid Style="{StaticResource ModernDataGrid}"
+                      ItemsSource="{Binding Pedidos}"
+                      SelectedItem="{Binding PedidoSeleccionado, Mode=TwoWay}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="PEDIDO #"     Binding="{Binding PedidoID}"              Width="75"/>
+                    <DataGridTextColumn Header="CLIENTE"      Binding="{Binding NombreCliente}"         Width="*"/>
+                    <DataGridTextColumn Header="VENDEDOR"     Binding="{Binding NombreEmpleado}"        Width="*"/>
+                    <DataGridTextColumn Header="F. PEDIDO"    Binding="{Binding FechaPedido, StringFormat='dd/MM/yyyy'}"    Width="105"/>
+                    <DataGridTextColumn Header="F. REQUERIDA" Binding="{Binding FechaRequerida, StringFormat='dd/MM/yyyy'}" Width="110"/>
+                    <DataGridTextColumn Header="F. ENVIO"     Binding="{Binding FechaEnvio, StringFormat='dd/MM/yyyy'}"     Width="100"/>
+                    <DataGridTextColumn Header="TRANSPORTE"   Binding="{Binding NombreTransportista}"   Width="*"/>
+                    <DataGridTextColumn Header="CIUDAD DEST." Binding="{Binding CiudadDestino}"         Width="110"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
     </Grid>
 </UserControl>

@@ -3,45 +3,49 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:WPF_SP.Views"
         xmlns:vm="clr-namespace:WPF_SP.ViewModels"
-        Title="NeptunoDB · Sistema de Gestión" Height="820" Width="1280"
-        MinHeight="640" MinWidth="1000"
+        Title="Neptuno · One UI 8 Suite Empresarial" Height="860" Width="1360"
+        MinHeight="680" MinWidth="1080"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BackgroundBrush}">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="260"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
         <Border Grid.Column="0" Background="{StaticResource SurfaceBrush}"
                 BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0">
             <DockPanel>
 
-                <StackPanel DockPanel.Dock="Top" Margin="12,20,12,0">
-                    <TextBlock Text="MÓDULOS" FontSize="10" FontWeight="SemiBold"
+                <StackPanel DockPanel.Dock="Top" Margin="20,24,20,16">
+
+                    <TextBlock Text="GESTION EMPRESARIAL" FontSize="10" FontWeight="Bold"
                                Foreground="{StaticResource TextSecondaryBrush}" Margin="8,0,0,10"/>
-                    <Button Margin="0,2"
+
+                    <Button Margin="0,3"
                             Command="{Binding NavegrarCommand}" CommandParameter="Categorias">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ShowCategorias}" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                        <Setter Property="Background" Value="{StaticResource OneUIAccentGradient}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
-                        <TextBlock Text="Categorías" VerticalAlignment="Center"/>
+                        <TextBlock Text="Categorias" VerticalAlignment="Center"/>
                     </Button>
-                    <Button Margin="0,2"
+
+                    <Button Margin="0,3"
                             Command="{Binding NavegrarCommand}" CommandParameter="Proveedores">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ShowProveedores}" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                        <Setter Property="Background" Value="{StaticResource OneUIAccentGradient}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
@@ -50,13 +54,14 @@
                         </Button.Style>
                         <TextBlock Text="Proveedores" VerticalAlignment="Center"/>
                     </Button>
-                    <Button Margin="0,2"
+
+                    <Button Margin="0,3"
                             Command="{Binding NavegrarCommand}" CommandParameter="Productos">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ShowProductos}" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                        <Setter Property="Background" Value="{StaticResource OneUIAccentGradient}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
@@ -65,13 +70,14 @@
                         </Button.Style>
                         <TextBlock Text="Productos" VerticalAlignment="Center"/>
                     </Button>
-                    <Button Margin="0,2"
+
+                    <Button Margin="0,3"
                             Command="{Binding NavegrarCommand}" CommandParameter="Pedidos">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ShowPedidos}" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                                        <Setter Property="Background" Value="{StaticResource OneUIAccentGradient}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
@@ -81,39 +87,51 @@
                         <TextBlock Text="Pedidos" VerticalAlignment="Center"/>
                     </Button>
 
-                    <Separator Margin="4,12"/>
+                    <Separator Margin="0,14,0,14"/>
 
-                    <TextBlock Text="REPORTES" FontSize="10" FontWeight="SemiBold"
+                    <TextBlock Text="ANALYTICS Y REPORTES" FontSize="10" FontWeight="Bold"
                                Foreground="{StaticResource TextSecondaryBrush}" Margin="8,0,0,10"/>
-                    <Button Margin="0,2"
+
+                    <Button Margin="0,3"
                             Command="{Binding NavegrarCommand}" CommandParameter="Reportes">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarButton}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ShowReportes}" Value="True">
-                                        <Setter Property="Background" Value="#22C55E"/>
+                                        <Setter Property="Background" Value="{StaticResource OneUIAccentGradient}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
-                        <TextBlock Text="Det. Pedidos" VerticalAlignment="Center"/>
+                        <TextBlock Text="Reporte de Ventas" VerticalAlignment="Center"/>
                     </Button>
                 </StackPanel>
-                <StackPanel DockPanel.Dock="Bottom" Margin="16,0,16,20">
-                    <Separator Margin="0,0,0,12"/>
-                    <TextBlock Text="SQL Server · HYCROS\SQLEXPRESS" FontSize="10"
-                               Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap"/>
-                    <TextBlock Text="NeptunoDB" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
-                </StackPanel>
+
+                <Border DockPanel.Dock="Bottom" Margin="16,0,16,20"
+                        Background="{StaticResource Surface2Brush}" CornerRadius="16"
+                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                        Padding="14,12">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <Ellipse Width="7" Height="7" Fill="{StaticResource SuccessBrush}" Margin="0,0,7,0"/>
+                            <TextBlock Text="EN LINEA" FontSize="10" FontWeight="Bold"
+                                       Foreground="{StaticResource SuccessBrush}"/>
+                        </StackPanel>
+                        <TextBlock Text="HYCROS\SQLEXPRESS" FontSize="11" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="BD: NeptunoDB" FontSize="11"
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
 
                 <Grid/>
             </DockPanel>
         </Border>
 
         <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
-            <Grid>
+            <Grid Margin="12,8">
                 <views:CategoriasView DataContext="{Binding Categorias}"
                     Visibility="{Binding DataContext.ShowCategorias,
                         RelativeSource={RelativeSource AncestorType=Window},

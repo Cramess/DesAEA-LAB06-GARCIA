@@ -35,9 +35,15 @@ public class PedidoRepository : IPedidoRepository
         await using var con = new SqlConnection(_cs);
         await using var cmd = new SqlCommand("dbo.usp_Pedido_Crear", con) { CommandType = CommandType.StoredProcedure };
         AddParams(cmd, p);
+        var paramNuevoId = cmd.Parameters.Add("@NuevoID", SqlDbType.Int);
+        paramNuevoId.Direction = ParameterDirection.Output;
+
         await con.OpenAsync();
-        var result = await cmd.ExecuteScalarAsync();
-        return Convert.ToInt32(result);
+        await cmd.ExecuteNonQueryAsync();
+
+        var nuevoId = paramNuevoId.Value != DBNull.Value ? Convert.ToInt32(paramNuevoId.Value) : 0;
+        p.PedidoID = nuevoId;
+        return nuevoId;
     }
 
     public async Task ActualizarAsync(Pedido p)
@@ -46,6 +52,7 @@ public class PedidoRepository : IPedidoRepository
         await using var cmd = new SqlCommand("dbo.usp_Pedido_Actualizar", con) { CommandType = CommandType.StoredProcedure };
         cmd.Parameters.Add("@PedidoID", SqlDbType.Int).Value = p.PedidoID;
         AddParams(cmd, p);
+
         await con.OpenAsync();
         await cmd.ExecuteNonQueryAsync();
     }
@@ -53,8 +60,9 @@ public class PedidoRepository : IPedidoRepository
     public async Task EliminarAsync(int id)
     {
         await using var con = new SqlConnection(_cs);
-        await using var cmd = new SqlCommand("dbo.usp_Pedido_Eliminar", con) { CommandType = CommandType.StoredProcedure };
+        await using var cmd = new SqlCommand("dbo.usp_Pedido_EliminarLogico", con) { CommandType = CommandType.StoredProcedure };
         cmd.Parameters.Add("@PedidoID", SqlDbType.Int).Value = id;
+
         await con.OpenAsync();
         await cmd.ExecuteNonQueryAsync();
     }
@@ -65,6 +73,7 @@ public class PedidoRepository : IPedidoRepository
         await using var cmd = new SqlCommand("dbo.usp_DetallePedidos_ReportePorFechas", con) { CommandType = CommandType.StoredProcedure };
         cmd.Parameters.Add("@FechaInicio", SqlDbType.Date).Value = inicio.Date;
         cmd.Parameters.Add("@FechaFin",    SqlDbType.Date).Value = fin.Date;
+
         await con.OpenAsync();
         await using var r = await cmd.ExecuteReaderAsync();
         var list = new List<DetallePedidoReporte>();
@@ -148,34 +157,35 @@ public class PedidoRepository : IPedidoRepository
 
     private static Pedido MapPedido(SqlDataReader r) => new()
     {
-        PedidoID           = r.GetInt32(r.GetOrdinal("PedidoID")),
-        ClienteID          = r.IsDBNull(r.GetOrdinal("ClienteID"))       ? null : r.GetInt32(r.GetOrdinal("ClienteID")),
-        EmpleadoID         = r.IsDBNull(r.GetOrdinal("EmpleadoID"))      ? null : r.GetInt32(r.GetOrdinal("EmpleadoID")),
-        FechaPedido        = r.GetDateTime(r.GetOrdinal("FechaPedido")),
-        FechaRequerida     = NullDate(r, "FechaRequerida"),
-        FechaEnvio         = NullDate(r, "FechaEnvio"),
-        TransportistaID    = r.IsDBNull(r.GetOrdinal("TransportistaID")) ? null : r.GetInt32(r.GetOrdinal("TransportistaID")),
-        Destinatario       = Str(r, "Destinatario"),
-        CiudadDestino      = Str(r, "CiudadDestino"),
-        PaisDestino        = Str(r, "PaisDestino"),
-        NombreCliente      = Str(r, "NombreCliente"),
-        NombreEmpleado     = Str(r, "NombreEmpleado"),
+        PedidoID            = r.GetInt32(r.GetOrdinal("PedidoID")),
+        ClienteID           = r.IsDBNull(r.GetOrdinal("ClienteID"))       ? null : r.GetInt32(r.GetOrdinal("ClienteID")),
+        EmpleadoID          = r.IsDBNull(r.GetOrdinal("EmpleadoID"))      ? null : r.GetInt32(r.GetOrdinal("EmpleadoID")),
+        FechaPedido         = r.GetDateTime(r.GetOrdinal("FechaPedido")),
+        FechaRequerida      = NullDate(r, "FechaRequerida"),
+        FechaEnvio          = NullDate(r, "FechaEnvio"),
+        TransportistaID     = r.IsDBNull(r.GetOrdinal("TransportistaID")) ? null : r.GetInt32(r.GetOrdinal("TransportistaID")),
+        Destinatario        = Str(r, "Destinatario"),
+        CiudadDestino       = Str(r, "CiudadDestino"),
+        PaisDestino         = Str(r, "PaisDestino"),
+        Activo              = !r.IsDBNull(r.GetOrdinal("Activo")) && r.GetBoolean(r.GetOrdinal("Activo")),
+        NombreCliente       = Str(r, "NombreCliente"),
+        NombreEmpleado      = Str(r, "NombreEmpleado"),
         NombreTransportista = Str(r, "NombreTransportista")
     };
 
     private static DetallePedidoReporte MapDetalle(SqlDataReader r) => new()
     {
-        PedidoID       = r.GetInt32(r.GetOrdinal("PedidoID")),
-        FechaPedido    = r.GetDateTime(r.GetOrdinal("FechaPedido")),
-        FechaEnvio     = NullDate(r, "FechaEnvio"),
-        Destinatario   = Str(r, "Destinatario"),
-        CiudadDestino  = Str(r, "CiudadDestino"),
-        PaisDestino    = Str(r, "PaisDestino"),
-        NombreCliente  = Str(r, "NombreCliente"),
-        NombreProducto = r.GetString(r.GetOrdinal("NombreProducto")),
-        PrecioUnidad   = r.GetDecimal(r.GetOrdinal("PrecioUnidad")),
-        Cantidad       = r.GetInt16(r.GetOrdinal("Cantidad")),
-        Descuento      = r.GetDecimal(r.GetOrdinal("Descuento")),
-        SubTotal       = r.GetDecimal(r.GetOrdinal("SubTotal"))
+        PedidoID       = Convert.ToInt32(r["PedidoID"]),
+        FechaPedido    = Convert.ToDateTime(r["FechaPedido"]),
+        FechaEnvio     = r["FechaEnvio"] == DBNull.Value ? null : Convert.ToDateTime(r["FechaEnvio"]),
+        Destinatario   = r["Destinatario"] == DBNull.Value ? null : Convert.ToString(r["Destinatario"]),
+        CiudadDestino  = r["CiudadDestino"] == DBNull.Value ? null : Convert.ToString(r["CiudadDestino"]),
+        PaisDestino    = r["PaisDestino"] == DBNull.Value ? null : Convert.ToString(r["PaisDestino"]),
+        NombreCliente  = r["NombreCliente"] == DBNull.Value ? null : Convert.ToString(r["NombreCliente"]),
+        NombreProducto = Convert.ToString(r["NombreProducto"]) ?? string.Empty,
+        PrecioUnidad   = Convert.ToDecimal(r["PrecioUnidad"]),
+        Cantidad       = Convert.ToInt16(r["Cantidad"]),
+        Descuento      = Convert.ToDecimal(r["Descuento"]),
+        SubTotal       = Convert.ToDecimal(r["SubTotal"])
     };
 }

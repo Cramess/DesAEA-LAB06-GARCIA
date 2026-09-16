@@ -20,12 +20,14 @@ public class ProveedorRepository : IProveedorRepository
         return list;
     }
 
-    public async Task<List<Proveedor>> BuscarAsync(string? nombreContacto, string? ciudad)
+    public async Task<List<Proveedor>> BuscarAsync(string? nombreContacto, string? ciudad, string? companiaNombre = null)
     {
         await using var con = new SqlConnection(_cs);
         await using var cmd = new SqlCommand("dbo.usp_Proveedor_Buscar", con) { CommandType = CommandType.StoredProcedure };
         cmd.Parameters.Add("@NombreContacto", SqlDbType.NVarChar, 40).Value = (object?)nombreContacto ?? DBNull.Value;
         cmd.Parameters.Add("@Ciudad",         SqlDbType.NVarChar, 30).Value = (object?)ciudad         ?? DBNull.Value;
+        cmd.Parameters.Add("@CompaniaNombre", SqlDbType.NVarChar, 60).Value = (object?)companiaNombre ?? DBNull.Value;
+
         await con.OpenAsync();
         await using var r = await cmd.ExecuteReaderAsync();
         var list = new List<Proveedor>();
@@ -48,9 +50,15 @@ public class ProveedorRepository : IProveedorRepository
         await using var con = new SqlConnection(_cs);
         await using var cmd = new SqlCommand("dbo.usp_Proveedor_Crear", con) { CommandType = CommandType.StoredProcedure };
         AddParams(cmd, p);
+        var paramNuevoId = cmd.Parameters.Add("@NuevoID", SqlDbType.Int);
+        paramNuevoId.Direction = ParameterDirection.Output;
+
         await con.OpenAsync();
-        var result = await cmd.ExecuteScalarAsync();
-        return Convert.ToInt32(result);
+        await cmd.ExecuteNonQueryAsync();
+
+        var nuevoId = paramNuevoId.Value != DBNull.Value ? Convert.ToInt32(paramNuevoId.Value) : 0;
+        p.ProveedorID = nuevoId;
+        return nuevoId;
     }
 
     public async Task ActualizarAsync(Proveedor p)
@@ -59,6 +67,7 @@ public class ProveedorRepository : IProveedorRepository
         await using var cmd = new SqlCommand("dbo.usp_Proveedor_Actualizar", con) { CommandType = CommandType.StoredProcedure };
         cmd.Parameters.Add("@ProveedorID", SqlDbType.Int).Value = p.ProveedorID;
         AddParams(cmd, p);
+
         await con.OpenAsync();
         await cmd.ExecuteNonQueryAsync();
     }
@@ -66,8 +75,9 @@ public class ProveedorRepository : IProveedorRepository
     public async Task EliminarAsync(int id)
     {
         await using var con = new SqlConnection(_cs);
-        await using var cmd = new SqlCommand("dbo.usp_Proveedor_Eliminar", con) { CommandType = CommandType.StoredProcedure };
+        await using var cmd = new SqlCommand("dbo.usp_Proveedor_EliminarLogico", con) { CommandType = CommandType.StoredProcedure };
         cmd.Parameters.Add("@ProveedorID", SqlDbType.Int).Value = id;
+
         await con.OpenAsync();
         await cmd.ExecuteNonQueryAsync();
     }
@@ -99,6 +109,7 @@ public class ProveedorRepository : IProveedorRepository
         CodigoPostal   = Str(r, "CodigoPostal"),
         Pais           = Str(r, "Pais"),
         Telefono       = Str(r, "Telefono"),
-        Fax            = Str(r, "Fax")
+        Fax            = Str(r, "Fax"),
+        Activo         = !r.IsDBNull(r.GetOrdinal("Activo")) && r.GetBoolean(r.GetOrdinal("Activo"))
     };
 }

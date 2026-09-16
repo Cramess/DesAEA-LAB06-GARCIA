@@ -12,6 +12,7 @@ public class Proveedor
     public string? Pais { get; set; }
     public string? Telefono { get; set; }
     public string? Fax { get; set; }
+    public bool Activo { get; set; } = true;
 
     public override string ToString() => CompaniaNombre;
 }

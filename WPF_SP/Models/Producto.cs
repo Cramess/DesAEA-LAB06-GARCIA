@@ -12,8 +12,8 @@ public class Producto
     public short UnidadesEnPedido { get; set; }
     public short NivelDeReorden { get; set; }
     public bool Descontinuado { get; set; }
+    public bool Activo { get; set; } = true;
 
-    // Propiedades de visualización (joined)
     public string? NombreCategoria { get; set; }
     public string? NombreProveedor { get; set; }
 }

@@ -90,8 +90,8 @@ public partial class PedidosViewModel : ObservableObject
     private async Task EliminarSeleccionadoAsync()
     {
         if (PedidoSeleccionado is null) return;
-        var res = MessageBox.Show($"¿Eliminar el pedido #{PedidoSeleccionado.PedidoID}? Esto eliminará también sus detalles.",
-            "Confirmar", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        var res = MessageBox.Show($"¿Dar de baja lógica al pedido #{PedidoSeleccionado.PedidoID}?",
+            "Confirmar Baja Lógica", MessageBoxButton.YesNo, MessageBoxImage.Warning);
         if (res != MessageBoxResult.Yes) return;
         ErrorMessage = null;
         try
@@ -99,7 +99,7 @@ public partial class PedidosViewModel : ObservableObject
             await _repo.EliminarAsync(PedidoSeleccionado.PedidoID);
             await CargarAsync();
         }
-        catch (Exception ex) { ErrorMessage = $"Error al eliminar: {ex.Message}"; }
+        catch (Exception ex) { ErrorMessage = $"Error al dar de baja lógica: {ex.Message}"; }
     }
 
     [RelayCommand]
