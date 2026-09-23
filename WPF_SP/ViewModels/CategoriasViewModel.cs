@@ -2,8 +2,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using WPF_SP.Data;
-using WPF_SP.Models;
+using WPF_SP.Data.Models;
+using WPF_SP.Data.Repositories;
 
 namespace WPF_SP.ViewModels;
 

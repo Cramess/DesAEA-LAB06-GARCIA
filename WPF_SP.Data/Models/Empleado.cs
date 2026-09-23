@@ -1,4 +1,4 @@
-namespace WPF_SP.Models;
+namespace WPF_SP.Data.Models;
 
 public class Empleado
 {

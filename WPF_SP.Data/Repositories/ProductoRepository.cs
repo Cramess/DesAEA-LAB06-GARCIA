@@ -1,8 +1,8 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
-using WPF_SP.Models;
+using WPF_SP.Data.Models;
 
-namespace WPF_SP.Data;
+namespace WPF_SP.Data.Repositories;
 
 public class ProductoRepository : IProductoRepository
 {

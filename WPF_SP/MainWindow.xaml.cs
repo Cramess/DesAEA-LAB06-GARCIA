@@ -1,5 +1,5 @@
 using System.Windows;
-using WPF_SP.Data;
+using WPF_SP.Data.Repositories;
 using WPF_SP.ViewModels;
 
 namespace WPF_SP

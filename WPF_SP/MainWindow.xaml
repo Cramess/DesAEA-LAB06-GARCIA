@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:WPF_SP.Views"
         xmlns:vm="clr-namespace:WPF_SP.ViewModels"
-        Title="Neptuno · One UI 8 Suite Empresarial" Height="860" Width="1360"
+        Title="SEM06-GARCIA" Height="860" Width="1360"
         MinHeight="680" MinWidth="1080"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BackgroundBrush}">
